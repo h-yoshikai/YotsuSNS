@@ -1,0 +1,38 @@
+.col-12{
+  padding-left: 0px;
+  padding-right: 0px;
+  flex:0 0 80%;
+}
+.btn{
+  width:100%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+ul.errorlist{
+  list-style-type: none;
+  padding: 0;
+  color: red;
+}
+footer{
+ clear: both;
+ background: #222;
+ color: #fff;
+ font-size: 85%;
+ margin-top: auto;
+}
+.inner{
+ width: auto;
+ max-width: 1400px;
+ margin: 0 auto;
+}
+#copyright{
+ clear: both;
+ text-align: center;
+ background: #222;
+ color: #ccc;
+}
+#wrapper {
+    display: flex;
+    flex-direction: column;
+  min-height: 100vh;
+}

@@ -1,0 +1,30 @@
+{% extends "accounts/layout.html" %}
+{% block static %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'accounts/css/edit.css' %}">
+{% endblock %}
+
+{% block content %}
+<p>{{user.username}}さんのユーザ情報</p>
+<a class="edit" href="#">編集</a>
+<table class="table">
+    <tbody>
+        <tr>
+            <th>ユーザID:</th>
+            <td>{{ user.username }}</td>
+        </tr>
+        <tr>
+            <th>メールアドレス:</th>
+            <td>{{ user.email }}</td>
+        </tr>
+        <tr>
+            <th>名前:</th>
+            <td>あいうえお</td>
+        </tr>
+        <tr>
+          <th>自己紹介文:</th>
+          <td>かきくけこ</td>
+        </tr>
+    </tbody>
+</table>
+{% endblock %}

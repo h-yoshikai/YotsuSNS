@@ -1,0 +1,16 @@
+p{
+  display:inline-block;
+  margin-bottom: 5px;
+}
+a.edit{
+  float:right;
+}
+.mypage{
+  font-weight: 800;
+  padding: 12px;
+
+}
+table.table{
+  margin:0;
+  border-bottom: 1px solid #dee2e6;
+}
