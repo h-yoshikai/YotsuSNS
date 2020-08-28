@@ -1,0 +1,26 @@
+{% extends 'accounts/layout.html' %}
+
+{% block content %}
+<form enctype="multipart/form-data" action="" method="post">
+    {% for field in userform %}
+    <div class="form-group">
+        <label for="{{field.id_for_label}}">{{field.label_tag}}</label>
+        {{field}}
+        {{field.help_text}}
+        {{field.errors}}
+    </div>
+    <hr>
+    {% endfor %}
+    {% for field in profileform %}
+    <div class="form-group">
+        <label for="{{field.id_for_label}}">{{field.label_tag}}</label>
+        {{field}}
+        {{field.help_text}}
+        {{field.errors}}
+    </div>
+    <hr>
+    {% endfor %}
+    {% csrf_token %}
+    <button type="submit" class="btn btn-primary btn-lg">更新</button>
+</form>
+{% endblock %}

@@ -1,7 +1,7 @@
 from django.contrib.auth.forms import AuthenticationForm,UserCreationForm,PasswordChangeForm,PasswordResetForm,SetPasswordForm
 
 from django.contrib.auth import get_user_model
-from .models import AuthUser
+from .models import AuthUser,Profile
 from django import forms
 import re
 from django.contrib.auth import authenticate
@@ -71,9 +71,47 @@ class UserCreateForm(UserCreationForm,forms.ModelForm):
             self.add_error('email','そのメールアドレスは既に使われています')
         return email
 
-    #def clean(self):
-    #    password1=self.cleaned_data.get('password1')
-    #    password2=self.cleaned_data.get('password2')
-    #    if not (password1==password2):
-    #        self.add_error('password2','パスワードが一致しません．もう一度お試しください.')
-    #    return self.cleaned_data
+class UserUpdateForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('username','email')
+
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+
+        self.fields['username'].label='ユーザID'
+        self.fields['username'].help_text='6文字以上の英数字を設定してください'
+        self.fields['email'].label='メールアドレス'
+
+    def clean_username(self):
+        name=self.cleaned_data.get('username')
+        alnumReg = re.compile(r'^[a-zA-Z0-9]+$')
+        if not alnumReg.match(name):
+            self.add_error('username','半角英数字で入力してください')
+        if name is None:
+            self.add_error('username','ユーザIDを設定してください')
+        if len(name)<6:
+            self.add_error('username','ユーザIDは6文字以上で設定してください')
+        #if AuthUser.objects.filter(username=name).exists():
+        #    self.add_error('username','そのユーザIDは既に使われています')
+
+        return name
+
+    #def clean_email(self):
+    #    email=self.cleaned_data.get('email')
+    #    print(email)
+    #    if AuthUser.objects.filter(email=email).exists():
+    #        self.add_error('email','そのメールアドレスは既に使われています')
+    #    return email
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ('pro_image','name','profile_text')
+
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
