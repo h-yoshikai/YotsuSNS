@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block content %}
+<img src="{{MEDIA_URL}}{% if profile.pro_image %}{{profile.pro_image}}{% else %}images/def.jpg{% endif %}" width=200>
 <p>{{user.username}}さんのユーザ情報</p>
 <a class="edit" href="#">編集</a>
 <table class="table">
@@ -19,11 +20,13 @@
         </tr>
         <tr>
             <th>名前:</th>
-            <td>あいうえお</td>
+            <td>{% if profile.name %}{{profile.name}}
+                {% else %}名前が設定されていません{% endif %}</td>
         </tr>
         <tr>
           <th>自己紹介文:</th>
-          <td>かきくけこ</td>
+          <td>{% if profile.profile_text %}{{profile.profile_text}}
+              {% else %}自己紹介文が設定されていません{% endif %}</td>
         </tr>
     </tbody>
 </table>

@@ -17,7 +17,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import UserPassesTestMixin
 
-from .models import AuthUser
+from .models import AuthUser,Profile
 
 User=get_user_model()
 # Create your views here.
@@ -36,7 +36,9 @@ class UserCreateDone(generic.TemplateView):
 @login_required(login_url='accounts/login')
 def Mypage(request):
     user=request.user
+    profile=Profile.objects.get(owner=user)
     params={
         'user':user,
+        'profile':profile,
     }
     return render(request,'accounts/mypage.html',params)

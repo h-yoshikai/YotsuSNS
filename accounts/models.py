@@ -51,3 +51,15 @@ class AuthUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.username
+
+class Profile(models.Model):
+    owner=models.ForeignKey(
+        AuthUser,
+        on_delete=models.CASCADE,
+        related_name='profile_owner')
+    pro_image=models.ImageField(upload_to='images/',null=True,blank=True)
+    name=models.CharField(default=None,max_length=30,null=True,blank=True)
+    profile_text=models.CharField(default=None,max_length=140,null=True,blank=True)
+
+    def __str__(self):
+        return self.owner.username
