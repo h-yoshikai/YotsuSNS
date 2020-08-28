@@ -11,23 +11,26 @@
 <table class="table">
     <tbody>
         <tr>
-            <th>ユーザID:</th>
+            <th>ユーザID</th>
             <td>{{ user.username }}</td>
         </tr>
         <tr>
-            <th>メールアドレス:</th>
+            <th>メール<br>アドレス</th>
             <td>{{ user.email }}</td>
         </tr>
         <tr>
-            <th>名前:</th>
+            <th>名前</th>
             <td>{% if profile.name %}{{profile.name}}
                 {% else %}名前が設定されていません{% endif %}</td>
         </tr>
         <tr>
-          <th>自己紹介文:</th>
+          <th>自己紹介文</th>
           <td>{% if profile.profile_text %}{{profile.profile_text}}
               {% else %}自己紹介文が設定されていません{% endif %}</td>
         </tr>
     </tbody>
 </table>
+
+<a class="edit" href="{% url 'passwordchange' %}">パスワードの変更</a>
+
 {% endblock %}

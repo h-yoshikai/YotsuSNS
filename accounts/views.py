@@ -9,7 +9,7 @@ from django.contrib.auth.views import (
 )
 from django.views import generic
 from .forms import (
-    LoginForm,UserCreateForm,UserUpdateForm,ProfileForm
+    LoginForm,UserCreateForm,UserUpdateForm,ProfileForm,MyPasswordChangeForm
 )
 from django.urls import reverse_lazy
 
@@ -27,6 +27,9 @@ User=get_user_model()
 class Login(LoginView):
     form_class = LoginForm
     template_name = 'accounts/login.html'
+
+class Logout(LoginRequiredMixin,LogoutView):
+    template_name = 'accounts/logout.html'
 
 class UserCreate(generic.CreateView,UserPassesTestMixin):
     form_class = UserCreateForm
@@ -104,3 +107,11 @@ def Edit(request):
             params['profileform']=profileform
 
     return render(request,'accounts/accountedit.html',params)
+
+class PasswordChange(PasswordChangeView):
+    form_class = MyPasswordChangeForm
+    success_url = reverse_lazy('passwordchange_done')
+    template_name = 'accounts/changepass.html'
+
+class PasswordChangeDone(PasswordChangeDoneView):
+    template_name = 'accounts/passwordchange_done.html'

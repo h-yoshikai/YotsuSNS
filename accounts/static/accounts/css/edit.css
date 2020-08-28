@@ -13,4 +13,12 @@ a.edit{
 table.table{
   margin:0;
   border-bottom: 1px solid #dee2e6;
+  font-size: 11pt;
+}
+img{
+    border-radius: 50%;
+    margin-bottom: 16px;
+    margin-right: 5px;
+    width: 80px;
+    height: 80px;
 }

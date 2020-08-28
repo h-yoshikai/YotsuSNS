@@ -30,10 +30,10 @@
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0" style="list-style:none;">
           {% if user.is_authenticated %}
           <li>
-            <a class="nav-item nav-link" href="#">ログアウト</a>
+            <a class="nav-item nav-link" href="{% url 'logout' %}">ログアウト</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">マイページ<span></span></a>
+            <a class="nav-link" href="{% url 'mypage' %}">マイページ<span></span></a>
           </li>
           {% else %}
           <li class="nav-item">
