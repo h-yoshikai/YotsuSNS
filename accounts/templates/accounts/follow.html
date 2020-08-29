@@ -1,0 +1,15 @@
+{% extends "accounts/layout.html" %}
+{% block content %}
+{% for user,count in follow %}
+<div>
+<img src="{% if user.followed.profile_owner.get.pro_image %}{{user.followed.profile_owner.get.pro_image.thumbnail.url}}{% else %}/media/images/def_thumbnail.jpg{% endif %}">
+<p>{{user.followed.username}}</p>
+{% if count > 0 %}
+<a class="edit" href="#">フォロー中</a>
+{% else %}
+<a class="edit" href="{% url 'followtry' user.username %}">フォローする</a>
+</div>
+{% endif %}
+
+{% endfor %}
+{% endblock %}

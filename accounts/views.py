@@ -17,7 +17,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model,login,authenticate
 from django.contrib.auth.mixins import UserPassesTestMixin
 
-from .models import AuthUser,Profile
+from .models import AuthUser,Profile,Follow
 from django.conf import settings
 
 import os
@@ -115,3 +115,55 @@ class PasswordChange(PasswordChangeView):
 
 class PasswordChangeDone(PasswordChangeDoneView):
     template_name = 'accounts/passwordchange_done.html'
+
+@login_required(login_url='/accounts/login')
+def FollowPage(request,user_id):
+    #リストにしたい場合はfilterもしくは，[user]にする
+    #見たいユーザのオブジェクトを取得
+    user=AuthUser.objects.get(username=user_id)
+    following=Follow.objects.filter(owner=user)
+    counts=[]
+    #この後に，見ているユーザ(request.user)が，followに入っているユーザをフォローしているかどうか調べる
+    for i in range(len(following)):
+        count=Follow.objects.filter(owner=request.user,followed=following[i].followed).count()
+        counts.append(count)
+    params={
+        'follow':zip(following,counts),
+    }
+    return render(request,'accounts/follow.html',params)
+
+@login_required(login_url='/accounts/login')
+def AllUsers(request):
+    users=AuthUser.objects.all()
+    counts=[]
+    for i in range(len(users)):
+        count=Follow.objects.filter(owner=request.user,followed=users[i]).count()
+        counts.append(count)
+
+    params={
+        'alluser':zip(users,counts),
+    }
+    return render(request,'accounts/allusers.html',params)
+
+@login_required(login_url='/accounts/login')
+def Followadd(request,user_id):
+    #userがfollowedをフォローする
+    user=request.user
+    followed=AuthUser.objects.get(username=user_id)
+    #followedが本人だったとき
+    #先にowner,followed両方自分のレコードを保存するのもあり？
+    if followed == request.user:
+        #あとで書き換える
+        return redirect(to='/accounts/'+user_id+'/following')
+
+    #followedがフォローされているか確認
+    num=Follow.objects.filter(owner=request.user).filter(followed=followed).count()
+    if num>0:
+        #あとで書き換える
+        return redirect(to='/accounts/'+user_id+'/following')
+
+    fol=Follow()
+    fol.owner=request.user
+    fol.followed=followed
+    fol.save()
+    return redirect(to='/accounts/'+user_id+'/following')

@@ -11,4 +11,10 @@ urlpatterns = [
     path('mypage/edit',views.Edit,name='edit'),
     path('mypage/passwordchange',views.PasswordChange.as_view(),name='passwordchange'),
     path('passwordchange/done',views.PasswordChangeDone.as_view(),name='passwordchange_done'),
+    #フォローしている人一覧ページ
+    path('<str:user_id>/following',views.FollowPage,name='following'),
+    #一時的に追加
+    path('allusers',views.AllUsers,name='allusers'),
+    #フォロー処理のトライ
+    path('<str:user_id>/followingtry',views.Followadd,name='followtry'),
 ]

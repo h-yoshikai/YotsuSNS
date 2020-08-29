@@ -79,3 +79,19 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.owner.username
+
+class Follow(models.Model):
+    #ownerがfollowedをフォローする
+    owner=models.ForeignKey(
+        AuthUser,
+        on_delete=models.CASCADE,
+        related_name='follow_owner'
+    )
+    followed=models.ForeignKey(
+        AuthUser,
+        on_delete=models.CASCADE,
+        related_name='followed'
+    )
+
+    def __str__(self):
+        return self.owner.username+'が'+self.followed.username+'をフォローしています'
