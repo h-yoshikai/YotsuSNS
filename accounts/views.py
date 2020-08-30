@@ -121,6 +121,7 @@ def FollowPage(request,user_id):
     #リストにしたい場合はfilterもしくは，[user]にする
     #見たいユーザのオブジェクトを取得
     user=AuthUser.objects.get(username=user_id)
+    #followedが，userがフォローしている人になる
     following=Follow.objects.filter(owner=user)
     counts=[]
     flag=1
@@ -139,6 +140,7 @@ def FollowPage(request,user_id):
 @login_required(login_url='/accounts/login')
 def FollowersPage(request,user_id):
     user=AuthUser.objects.get(username=user_id)
+    #ownerが，userのフォロワーになる
     followers=Follow.objects.filter(followed=user)
     counts=[]
     flag=0
@@ -156,8 +158,10 @@ def FollowersPage(request,user_id):
 
 @login_required(login_url='/accounts/login')
 def AllUsers(request):
+    #adminが表示されないようにしたい
     users=AuthUser.objects.all()
     counts=[]
+    #request.userがフォローしているかどうか調べる
     for i in range(len(users)):
         count=Follow.objects.filter(owner=request.user,followed=users[i]).count()
         if request.user == users[i]:
@@ -190,13 +194,16 @@ def Followadd(request,user_id):
     fol.owner=request.user
     fol.followed=followed
     fol.save()
-    return redirect(to='/accounts/'+user_id+'/following')
+    return redirect(to='/accounts/allusers')
 
 @login_required(login_url='/accounts/login')
 def UserPage(request,user_id):
+    #表示するユーザを取得
     owner=AuthUser.objects.get(username=user_id)
+    #フォロワー，フォロー中の数を調べる
     followercount=Follow.objects.filter(followed=owner).count()
     followingcount=Follow.objects.filter(owner=owner).count()
+    #自分がそのユーザ(owner)をフォローしているかどうか調べる
     count=Follow.objects.filter(owner=request.user,followed=owner).count()
     if request.user == owner:
         count=-1

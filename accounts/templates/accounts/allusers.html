@@ -5,18 +5,19 @@
 {% endblock %}
 
 {% block content %}
+<h3>All Users</h3>
 {% for user,count in alluser %}
 <div class="user">
-<a href="{% url 'userpage' user.username %}">
+<a class="username" href="{% url 'userpage' user.username %}">
 <img src="{% if user.profile_owner.get.pro_image %}{{user.profile_owner.get.pro_image.thumbnail.url}}{% else %}/media/images/def_thumbnail.jpg{% endif %}">
 <p>{{user.username}}</p>
 </a>
 {% if count > 0 %}
-<p class="follow">フォロー中</p>
+<p class="follow edbutton">フォロー中</p>
 {% elif count < 0 %}
 <p></p>
 {% else %}
-<a class="follow" href="{% url 'followtry' user.username %}">フォローする</a>
+<a class="follow button" href="{% url 'followtry' user.username %}">フォローする</a>
 {% endif %}
 </div>
 <hr>

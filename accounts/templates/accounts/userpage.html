@@ -32,12 +32,12 @@
 </div>
 
 {% if count > 0 %}
-<div class="myfollow">フォロー中</div>
+<div class="edmyfollow">フォロー中</div>
 {% elif count < 0 %}
 <p></p>
 {% else %}
 <div class="myfollow">
-<a class="myfollow" href="{% url 'followtry' user.username %}">フォローする</a>
+<a class="myfollowa" href="{% url 'followtry' user.username %}">フォローする</a>
 </div>
 {% endif %}
 

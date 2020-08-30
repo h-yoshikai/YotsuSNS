@@ -11,11 +11,11 @@
 <img src="{% if user.followed.profile_owner.get.pro_image %}{{user.followed.profile_owner.get.pro_image.thumbnail.url}}{% else %}/media/images/def_thumbnail.jpg{% endif %}">
 <p>{{user.followed.username}}</p>
 {% if count > 0 %}
-<p class="follow">フォロー中</p>
+<p class="follow edbutton">フォロー中</p>
 {% elif count < 0 %}
 <p></p>
 {% else %}
-<a class="follow" href="{% url 'followtry' user.followed.username %}">フォローする</a>
+<a class="follow button" href="{% url 'followtry' user.followed.username %}">フォローする</a>
 </div>
 {% endif %}
 {% else %}
@@ -23,11 +23,11 @@
 <img src="{% if user.owner.profile_owner.get.pro_image %}{{user.owner.profile_owner.get.pro_image.thumbnail.url}}{% else %}/media/images/def_thumbnail.jpg{% endif %}">
 <p>{{user.owner.username}}</p>
 {% if count > 0 %}
-<p class="follow">フォロー中</p>
+<p class="follow edbutton">フォロー中</p>
 {% elif count < 0 %}
 <p></p>
 {% else %}
-<a class="follow" href="{% url 'followtry' user.owner.username %}">フォローする</a>
+<a class="follow button" href="{% url 'followtry' user.owner.username %}">フォローする</a>
 </div>
 {% endif %}
 {% endif %}
