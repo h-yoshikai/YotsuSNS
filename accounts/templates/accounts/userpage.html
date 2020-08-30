@@ -1,0 +1,44 @@
+{% extends "accounts/layout.html" %}
+{% block static %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'accounts/css/edit.css' %}">
+{% endblock %}
+
+{% block content %}
+<h3>{{user.username}}</h3>
+
+<div class="user">
+<img src="{% if user.profile_owner.get.pro_image %}{{user.profile_owner.get.pro_image.thumbnail.url}}{% else %}/media/images/def_thumbnail.jpg{% endif %}">
+<div class="verwrap">
+    <p>
+    <a class="weight" href="{% url 'followers' user.username %}">{{followercount}}</a></p>
+    <p class="mypgfollow">フォロワー</p>
+</div>
+<div class="verwrap">
+    <p>
+    <a class="weight" href="{% url 'following' user.username %}">{{followingcount}}</a></p>
+    <p class="mypgfollow">フォロー中</p>
+</div>
+</div>
+<p>
+{% if user.profile_owner.get.name %}
+{{user.profile_owner.get.name}}
+</p>
+{% endif %}
+<div class="profile">
+    {% if user.profile_owner.get.profile_text %}
+    {{user.profile_owner.get.profile_text}}
+    {% endif %}
+</div>
+
+{% if count > 0 %}
+<div class="myfollow">フォロー中</div>
+{% elif count < 0 %}
+<p></p>
+{% else %}
+<div class="myfollow">
+<a class="myfollow" href="{% url 'followtry' user.username %}">フォローする</a>
+</div>
+{% endif %}
+
+{% endblock %}

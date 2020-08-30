@@ -123,12 +123,34 @@ def FollowPage(request,user_id):
     user=AuthUser.objects.get(username=user_id)
     following=Follow.objects.filter(owner=user)
     counts=[]
+    flag=1
     #この後に，見ているユーザ(request.user)が，followに入っているユーザをフォローしているかどうか調べる
     for i in range(len(following)):
         count=Follow.objects.filter(owner=request.user,followed=following[i].followed).count()
+        if request.user == following[i].followed:
+            count=-1
         counts.append(count)
     params={
         'follow':zip(following,counts),
+        'flag':flag,
+    }
+    return render(request,'accounts/follow.html',params)
+
+@login_required(login_url='/accounts/login')
+def FollowersPage(request,user_id):
+    user=AuthUser.objects.get(username=user_id)
+    followers=Follow.objects.filter(followed=user)
+    counts=[]
+    flag=0
+    #自分がその人のフォロワーをフォローしているか調べる
+    for i in range(len(followers)):
+        count=Follow.objects.filter(owner=request.user,followed=followers[i].owner).count()
+        if request.user == followers[i].owner:
+            count=-1
+        counts.append(count)
+    params={
+        'follow':zip(followers,counts),
+        'flag':flag,
     }
     return render(request,'accounts/follow.html',params)
 
@@ -138,6 +160,8 @@ def AllUsers(request):
     counts=[]
     for i in range(len(users)):
         count=Follow.objects.filter(owner=request.user,followed=users[i]).count()
+        if request.user == users[i]:
+            count=-1
         counts.append(count)
 
     params={
@@ -167,3 +191,19 @@ def Followadd(request,user_id):
     fol.followed=followed
     fol.save()
     return redirect(to='/accounts/'+user_id+'/following')
+
+@login_required(login_url='/accounts/login')
+def UserPage(request,user_id):
+    owner=AuthUser.objects.get(username=user_id)
+    followercount=Follow.objects.filter(followed=owner).count()
+    followingcount=Follow.objects.filter(owner=owner).count()
+    count=Follow.objects.filter(owner=request.user,followed=owner).count()
+    if request.user == owner:
+        count=-1
+    params={
+        'user':owner,
+        'followercount':followercount,
+        'followingcount':followingcount,
+        'count':count,
+    }
+    return render(request,'accounts/userpage.html',params)

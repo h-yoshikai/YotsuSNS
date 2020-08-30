@@ -1,8 +1,13 @@
+h3{
+    text-align: center;
+    border-top: solid 3px;
+    border-bottom: solid 3px;
+}
 p{
   display:inline-block;
   margin-bottom: 5px;
 }
-a.edit{
+.edit{
   float:right;
 }
 .mypage{
@@ -17,8 +22,36 @@ table.table{
 }
 img{
     border-radius: 50%;
-    margin-bottom: 16px;
+    margin-top: 3px;
+    margin-bottom: 3px;
     margin-right: 5px;
-    width: 80px;
-    height: 80px;
+    width: 60px;
+    height: 60px;
+}
+.follow{
+    float: right;
+    margin-top: 20px;
+}
+hr{
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+.verwrap{
+    display: flex;
+    flex-direction: column;
+    float: right;
+    text-align: center;
+    margin-left: 20px;
+}
+.mypgfollow{
+    font-size: 12px;
+}
+.weight{
+    font-weight: bold;
+}
+.myfollow{
+    text-align: center;
+}
+a.weight{
+    color: black;
 }

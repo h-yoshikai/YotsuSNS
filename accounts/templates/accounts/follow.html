@@ -1,15 +1,35 @@
 {% extends "accounts/layout.html" %}
+{% block static %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'accounts/css/edit.css' %}">
+{% endblock %}
+
 {% block content %}
 {% for user,count in follow %}
+{% if flag > 0 %}
 <div>
 <img src="{% if user.followed.profile_owner.get.pro_image %}{{user.followed.profile_owner.get.pro_image.thumbnail.url}}{% else %}/media/images/def_thumbnail.jpg{% endif %}">
 <p>{{user.followed.username}}</p>
 {% if count > 0 %}
-<a class="edit" href="#">フォロー中</a>
+<p class="follow">フォロー中</p>
+{% elif count < 0 %}
+<p></p>
 {% else %}
-<a class="edit" href="{% url 'followtry' user.username %}">フォローする</a>
+<a class="follow" href="{% url 'followtry' user.followed.username %}">フォローする</a>
 </div>
 {% endif %}
-
+{% else %}
+<div>
+<img src="{% if user.owner.profile_owner.get.pro_image %}{{user.owner.profile_owner.get.pro_image.thumbnail.url}}{% else %}/media/images/def_thumbnail.jpg{% endif %}">
+<p>{{user.owner.username}}</p>
+{% if count > 0 %}
+<p class="follow">フォロー中</p>
+{% elif count < 0 %}
+<p></p>
+{% else %}
+<a class="follow" href="{% url 'followtry' user.owner.username %}">フォローする</a>
+</div>
+{% endif %}
+{% endif %}
 {% endfor %}
 {% endblock %}
