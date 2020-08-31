@@ -5,29 +5,67 @@
 {% endblock %}
 
 {% block content %}
-{% for user,count in follow %}
-{% if flag > 0 %}
 <div>
-<img src="{% if user.followed.profile_owner.get.pro_image %}{{user.followed.profile_owner.get.pro_image.thumbnail.url}}{% else %}/media/images/def_thumbnail.jpg{% endif %}">
-<p>{{user.followed.username}}</p>
+<a class="username" href="{% url 'userpage' focususer.username %}">
+<img src="{% if focususer.profile_owner.get.pro_image %}{{focususer.profile_owner.get.pro_image.thumbnail.url}}{% else %}/media/images/def_thumbnail.jpg{% endif %}">
+<p>{{focususer.username}}</p>
+</a>
 {% if count > 0 %}
-<p class="follow edbutton">フォロー中</p>
+<a class="follow edbutton" href="{% url 'followtry' focususer.username %}">フォロー中</a>
 {% elif count < 0 %}
 <p></p>
 {% else %}
-<a class="follow button" href="{% url 'followtry' user.followed.username %}">フォローする</a>
+<a class="follow button" href="{% url 'followtry' focususer.username %}">フォローする</a>
+{% endif %}
+</div>
+
+<div class="tab">
+    <span {% if flag == 0 %}class="underline"{% endif %}>
+        {% if flag > 0 %}<a class="username" href="{% url 'followers' focususer.username %}">フォロワー</a>
+        {% else %}フォロワー
+        {% endif %}
+    </span>
+    <span {% if flag > 0 %}class="underline"{% endif %}>
+        {% if flag == 0 %}<a class="username" href="{% url 'following' focususer.username %}">フォロー中</a>
+        {% else %}フォロー中
+        {% endif %}
+    </span>
+</div>
+{% for user,count in follow %}
+{% if flag > 0 %}
+<div>
+<a class="username" href="{% url 'userpage' user.followed.username %}">
+<img src="{% if user.followed.profile_owner.get.pro_image %}{{user.followed.profile_owner.get.pro_image.thumbnail.url}}{% else %}/media/images/def_thumbnail.jpg{% endif %}">
+<p>{{user.followed.username}}</p>
+</a>
+{% if count > 0 %}
+<a class="follow edbutton" href="{% url 'followtry' user.followed.username %}">
+フォロー中
+</a>
+{% elif count < 0 %}
+<p></p>
+{% else %}
+<a class="follow button" href="{% url 'followtry' user.followed.username %}">
+フォローする
+</a>
 </div>
 {% endif %}
 {% else %}
 <div>
+<a class="username" href="{% url 'userpage' user.owner.username %}">
 <img src="{% if user.owner.profile_owner.get.pro_image %}{{user.owner.profile_owner.get.pro_image.thumbnail.url}}{% else %}/media/images/def_thumbnail.jpg{% endif %}">
 <p>{{user.owner.username}}</p>
+</a>
 {% if count > 0 %}
-<p class="follow edbutton">フォロー中</p>
+<a class="follow edbutton" href="{% url 'followtry' user.followed.username %}">
+フォロー中
+</a>
 {% elif count < 0 %}
 <p></p>
 {% else %}
-<a class="follow button" href="{% url 'followtry' user.owner.username %}">フォローする</a>
+<a class="follow button" href="{% url 'followtry' user.owner.username %}">
+フォローする
+</a>
 </div>
 {% endif %}
 {% endif %}

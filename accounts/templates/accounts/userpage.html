@@ -11,13 +11,13 @@
 <img src="{% if user.profile_owner.get.pro_image %}{{user.profile_owner.get.pro_image.thumbnail.url}}{% else %}/media/images/def_thumbnail.jpg{% endif %}">
 <div class="verwrap">
     <p>
-    <a class="weight" href="{% url 'followers' user.username %}">{{followercount}}</a></p>
-    <p class="mypgfollow">フォロワー</p>
+    <a class="weight" href="{% url 'following' user.username %}">{{followingcount}}</a></p>
+    <p class="mypgfollow">フォロー中</p>
 </div>
 <div class="verwrap">
     <p>
-    <a class="weight" href="{% url 'following' user.username %}">{{followingcount}}</a></p>
-    <p class="mypgfollow">フォロー中</p>
+    <a class="weight" href="{% url 'followers' user.username %}">{{followercount}}</a></p>
+    <p class="mypgfollow">フォロワー</p>
 </div>
 </div>
 <p>

@@ -1,4 +1,5 @@
 from django.shortcuts import render,redirect,resolve_url
+from django.http import HttpResponseRedirect
 from django.views.generic import View
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
@@ -125,6 +126,8 @@ def FollowPage(request,user_id):
     following=Follow.objects.filter(owner=user)
     counts=[]
     flag=1
+    #自分がそのユーザ(owner)をフォローしているかどうか調べる
+    isFollow=Follow.objects.filter(owner=request.user,followed=user).count()
     #この後に，見ているユーザ(request.user)が，followに入っているユーザをフォローしているかどうか調べる
     for i in range(len(following)):
         count=Follow.objects.filter(owner=request.user,followed=following[i].followed).count()
@@ -132,8 +135,10 @@ def FollowPage(request,user_id):
             count=-1
         counts.append(count)
     params={
+        'focususer':user,
         'follow':zip(following,counts),
         'flag':flag,
+        'count':isFollow,
     }
     return render(request,'accounts/follow.html',params)
 
@@ -144,6 +149,8 @@ def FollowersPage(request,user_id):
     followers=Follow.objects.filter(followed=user)
     counts=[]
     flag=0
+    #自分がそのユーザ(owner)をフォローしているかどうか調べる
+    isFollow=Follow.objects.filter(owner=request.user,followed=user).count()
     #自分がその人のフォロワーをフォローしているか調べる
     for i in range(len(followers)):
         count=Follow.objects.filter(owner=request.user,followed=followers[i].owner).count()
@@ -151,8 +158,10 @@ def FollowersPage(request,user_id):
             count=-1
         counts.append(count)
     params={
+        'focususer':user,
         'follow':zip(followers,counts),
         'flag':flag,
+        'count':isFollow,
     }
     return render(request,'accounts/follow.html',params)
 
@@ -187,14 +196,16 @@ def Followadd(request,user_id):
     #followedがフォローされているか確認
     num=Follow.objects.filter(owner=request.user).filter(followed=followed).count()
     if num>0:
-        #あとで書き換える
-        return redirect(to='/accounts/'+user_id+'/following')
+        #あとで書き換える(解除処理？)
+        data=Follow.objects.get(owner=request.user,followed=followed)
+        data.delete()
+        return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
 
     fol=Follow()
     fol.owner=request.user
     fol.followed=followed
     fol.save()
-    return redirect(to='/accounts/allusers')
+    return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
 
 @login_required(login_url='/accounts/login')
 def UserPage(request,user_id):
