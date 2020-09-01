@@ -1,10 +1,11 @@
 from django.contrib.auth.forms import AuthenticationForm,UserCreationForm,PasswordChangeForm,PasswordResetForm,SetPasswordForm
 
 from django.contrib.auth import get_user_model
-from .models import AuthUser,Profile
+from .models import AuthUser,Profile,Message
 from django import forms
 import re
 from django.contrib.auth import authenticate
+from file_resubmit.admin import AdminResubmitImageWidget
 
 User=get_user_model()
 
@@ -121,3 +122,33 @@ class MyPasswordChangeForm(PasswordChangeForm):
         super().__init__(*args,**kwargs)
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
+
+class MessageForm(forms.ModelForm):
+    class Meta:
+        model = Message
+        fields = ['image','content']
+
+class MessageContentForm(forms.ModelForm):
+    class Meta:
+        model = Message
+        fields = ['content']
+        widgets = {
+            'content':forms.Textarea(
+                attrs={'placeholder':'キャプションを書く','rows':'5'}
+            )
+        }
+
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+
+        self.fields['content'].label='キャプション'
+
+class MessageImageForm(forms.ModelForm):
+    class Meta:
+        model = Message
+        fields = ['image']
+        widgets = {
+            'image':AdminResubmitImageWidget(),
+        }

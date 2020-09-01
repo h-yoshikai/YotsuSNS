@@ -23,7 +23,7 @@ table.table{
   font-size: 11pt;
 }
 /*プロフィール画像を丸く見せる*/
-img{
+img.thumbnail{
     border-radius: 50%;
     margin-top: 3px;
     margin-bottom: 3px;
@@ -120,4 +120,38 @@ a.username{
 }
 span.underline{
     border-bottom: 3px solid black;
+}
+
+.postimage{
+    text-align: center;
+}
+img.confimage{
+    width: 180px;
+    height: 180px;
+    margin-bottom: 10px;
+}
+.cancel a{
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    padding: 5px 5px;
+    background: #ffffff;
+    color: #007fff;
+    line-height: 1em;
+    transition: .3s;
+    border: 2px solid #007fff;
+    width: 124px;
+}
+div.cancel{
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+div.preview{
+    margin-top: 10px;
+    text-align: center;
+}
+img.preimage{
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
 }

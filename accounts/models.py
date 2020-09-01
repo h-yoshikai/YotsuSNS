@@ -68,7 +68,7 @@ class Profile(models.Model):
         null=True,
         blank=True,
         variations={
-            'large':(600,400),
+            'large':(600,600),
             'thumbnail':(100,100,True),
             'medium':(300,200),
         })
@@ -95,3 +95,34 @@ class Follow(models.Model):
 
     def __str__(self):
         return self.owner.username+'が'+self.followed.username+'をフォローしています'
+
+class Message(models.Model):
+    myid=models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')
+    owner=models.ForeignKey(
+        AuthUser,
+        on_delete=models.CASCADE,
+        related_name='message_owner'
+    )
+    image=StdImageField(
+        upload_to='images/',
+        variations={
+            'large':(600,600,True),
+            'thumbnail':(100,100,True),
+            'medium':(300,200),
+    })
+    content=models.CharField(
+        default=None,
+        max_length=140,
+        null=True,
+        blank=True
+    )
+    share_id=models.IntegerField(default=-1)
+    good_count=models.IntegerField(default=0)
+    share_count=models.IntegerField(default=0)
+    pub_date=models.DateTimeField(auto_now_add=True)
+
+    def get_share(self):
+        return Message.objects.get(id=self.share_id)
+
+    class Meta:
+        ordering = ('-pub_date',)

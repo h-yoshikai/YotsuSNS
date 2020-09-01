@@ -9,7 +9,7 @@
 {% for user,count in alluser %}
 <div class="user">
 <a class="username" href="{% url 'userpage' user.username %}">
-<img src="{% if user.profile_owner.get.pro_image %}{{user.profile_owner.get.pro_image.thumbnail.url}}{% else %}/media/images/def_thumbnail.jpg{% endif %}">
+<img class="thumbnail" src="{% if user.profile_owner.get.pro_image %}{{user.profile_owner.get.pro_image.thumbnail.url}}{% else %}/media/images/def_thumbnail.jpg{% endif %}">
 <p>{{user.username}}</p>
 </a>
 {% if count > 0 %}

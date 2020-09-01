@@ -7,7 +7,7 @@
 {% block content %}
 <div>
 <a class="username" href="{% url 'userpage' focususer.username %}">
-<img src="{% if focususer.profile_owner.get.pro_image %}{{focususer.profile_owner.get.pro_image.thumbnail.url}}{% else %}/media/images/def_thumbnail.jpg{% endif %}">
+<img class="thumbnail" src="{% if focususer.profile_owner.get.pro_image %}{{focususer.profile_owner.get.pro_image.thumbnail.url}}{% else %}/media/images/def_thumbnail.jpg{% endif %}">
 <p>{{focususer.username}}</p>
 </a>
 {% if count > 0 %}
@@ -35,7 +35,7 @@
 {% if flag > 0 %}
 <div>
 <a class="username" href="{% url 'userpage' user.followed.username %}">
-<img src="{% if user.followed.profile_owner.get.pro_image %}{{user.followed.profile_owner.get.pro_image.thumbnail.url}}{% else %}/media/images/def_thumbnail.jpg{% endif %}">
+<img class="thumbnail" src="{% if user.followed.profile_owner.get.pro_image %}{{user.followed.profile_owner.get.pro_image.thumbnail.url}}{% else %}/media/images/def_thumbnail.jpg{% endif %}">
 <p>{{user.followed.username}}</p>
 </a>
 {% if count > 0 %}
@@ -53,7 +53,7 @@
 {% else %}
 <div>
 <a class="username" href="{% url 'userpage' user.owner.username %}">
-<img src="{% if user.owner.profile_owner.get.pro_image %}{{user.owner.profile_owner.get.pro_image.thumbnail.url}}{% else %}/media/images/def_thumbnail.jpg{% endif %}">
+<img class="thumbnail" src="{% if user.owner.profile_owner.get.pro_image %}{{user.owner.profile_owner.get.pro_image.thumbnail.url}}{% else %}/media/images/def_thumbnail.jpg{% endif %}">
 <p>{{user.owner.username}}</p>
 </a>
 {% if count > 0 %}

@@ -1,0 +1,32 @@
+{% extends 'accounts/layout.html' %}
+{% block static %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'accounts/css/edit.css' %}">
+{% endblock %}
+
+{% block content %}
+<h3>新規投稿</h3>
+<div class="cancel">
+    <a href="{% url 'postcancel' mess.myid %}">キャンセル</a>
+</div>
+<div class="postimage">
+    <img class="confimage" src="{% if mess.image %}{{mess.image.large.url}}{% else %}/media/images/def_thumbnail.jpg{% endif %}">
+</div>
+
+<form enctype="multipart/form-data" action="" method="POST">
+    <!--ユーザーテーブルの入力フォーム-->
+    {% for field in messageform %}
+    <div class="form-group">
+        {{ field }}
+        {{ field.help_text }}
+        {{ field.errors }}
+    </div>
+    <hr>
+    {% endfor %}
+    {% csrf_token %}
+    <input type="hidden" name="mode" value="__content__">
+    <input type="hidden" name="myid" value="{{mess.myid}}
+">
+    <button type="submit" class="btn btn-primary btn-lg">シェア</button>
+</form>
+{% endblock %}

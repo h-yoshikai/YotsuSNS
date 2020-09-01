@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'stdimage',
+    'file_resubmit',
 ]
 
 MIDDLEWARE = [
@@ -104,6 +105,15 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+CACHES = {
+    'default':{
+        'BACKEND':'django.core.cache.backends.locmem.LocMemCache',
+    },
+    "file_resubmit":{
+        'BACKEND':'django.core.cache.backends.filebased.FileBasedCache',
+        "LOCATION":'/tmp/file_resubmit'
+    },
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/

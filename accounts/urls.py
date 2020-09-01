@@ -16,6 +16,9 @@ urlpatterns = [
     path('<str:user_id>/followers',views.FollowersPage,name='followers'),
     #一時的に追加
     path('allusers',views.AllUsers,name='allusers'),
+    path('create',views.Post,name='create'),
+    path('create/detail',views.PostDetail,name='detail'),
+    path('postcancel/<int:myid>',views.PostCancel,name='postcancel'),
     #フォロー処理のトライ
     path('<str:user_id>/followingtry',views.Followadd,name='followtry'),
     path('<str:user_id>',views.UserPage,name='userpage'),

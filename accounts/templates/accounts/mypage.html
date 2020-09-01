@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-<img src="{% if profile.pro_image %}{{user.profile_owner.get.pro_image.thumbnail.url}}{% else %}/media/images/def_thumbnail.jpg{% endif %}">
+<img class="thumbnail" src="{% if profile.pro_image %}{{user.profile_owner.get.pro_image.thumbnail.url}}{% else %}/media/images/def_thumbnail.jpg{% endif %}">
 <p>{{user.username}}さんのユーザ情報</p>
 <a class="edit" href="{% url 'edit' %}">編集</a>
 <table class="table">

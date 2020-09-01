@@ -10,7 +10,7 @@ from django.contrib.auth.views import (
 )
 from django.views import generic
 from .forms import (
-    LoginForm,UserCreateForm,UserUpdateForm,ProfileForm,MyPasswordChangeForm
+    LoginForm,UserCreateForm,UserUpdateForm,ProfileForm,MyPasswordChangeForm,MessageForm,MessageImageForm,MessageContentForm
 )
 from django.urls import reverse_lazy
 
@@ -18,7 +18,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model,login,authenticate
 from django.contrib.auth.mixins import UserPassesTestMixin
 
-from .models import AuthUser,Profile,Follow
+from .models import AuthUser,Profile,Follow,Message
 from django.conf import settings
 
 import os
@@ -225,3 +225,62 @@ def UserPage(request,user_id):
         'count':count,
     }
     return render(request,'accounts/userpage.html',params)
+
+@login_required(login_url='/accounts/login')
+def Post(request):
+    imform=MessageImageForm()
+    params={
+        'imageform':imform,
+    }
+    return render(request,'accounts/postcreate.html',params)
+
+@login_required(login_url='/accounts/login')
+def PostDetail(request):
+    #/createから来た場合（画像の確認）
+    if request.method == 'POST' and request.POST['mode'] == '__image__':
+        obj=Message(owner=request.user)
+        imageform=MessageImageForm(request.POST,request.FILES,instance=obj)
+        if imageform.is_valid():
+            imageform.save()
+            newobj=Message.objects.get(myid=obj.myid)
+            params={
+                'messageform':MessageContentForm(instance=newobj),
+                'mess':newobj,
+            }
+            return render(request,'accounts/postdetail.html',params)
+    #/create/detailから来た場合（キャプション，タグの確認）
+    elif request.method == 'POST' and request.POST['mode'] == '__content__':
+        obj=Message.objects.get(myid=request.POST['myid'])
+        contentform=MessageContentForm(request.POST,instance=obj)
+        #フォーム内容が正しければ保存してマイページへ（あとからタイムラインに行くようにする）
+        if contentform.is_valid():
+            contentform.save()
+            return redirect(to='/accounts/mypage')
+        #フォーム内容がよくなければ，エラーメッセージを表示（ページそのまま）
+        else:
+            params={
+                'messageform':contentform,
+                'mess':obj,
+            }
+            return render(request,'accounts/postdetail.html',params)
+
+    return redirect(to='/accounts/create')
+
+@login_required(login_url='/accounts/login')
+def PostCancel(request,myid):
+    #編集中だったメッセージを取得
+    obj=Message.objects.get(myid=myid)
+    #保存した画像のパスを取得
+    original=os.path.join(settings.MEDIA_ROOT,obj.image.name)
+    large=os.path.join(settings.MEDIA_ROOT,obj.image.large.name)
+    thumbnail=os.path.join(settings.MEDIA_ROOT,obj.image.thumbnail.name)
+    medium=os.path.join(settings.MEDIA_ROOT,obj.image.medium.name)
+    #画像を削除
+    os.remove(original)
+    os.remove(large)
+    os.remove(thumbnail)
+    os.remove(medium)
+    #メッセージを削除
+    obj.delete()
+
+    return redirect(to='/accounts/create')
