@@ -151,7 +151,7 @@ div.preview{
     text-align: center;
 }
 img.preimage{
-    width: 200px;
-    height: 200px;
+    width: 300px;
+    height: 300px;
     object-fit: cover;
 }
