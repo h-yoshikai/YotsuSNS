@@ -8,7 +8,7 @@
 <h3>{{user.username}}</h3>
 
 <div class="user">
-<img src="{% if user.profile_owner.get.pro_image %}{{user.profile_owner.get.pro_image.thumbnail.url}}{% else %}/media/images/def_thumbnail.jpg{% endif %}">
+<img class="thumbnail" src="{% if user.profile_owner.get.pro_image %}{{user.profile_owner.get.pro_image.thumbnail.url}}{% else %}/media/images/def_thumbnail.jpg{% endif %}">
 <div class="verwrap">
     <p>
     <a class="weight" href="{% url 'following' user.username %}">{{followingcount}}</a></p>

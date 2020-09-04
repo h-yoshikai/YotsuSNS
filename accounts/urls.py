@@ -5,6 +5,7 @@ urlpatterns = [
     path('login',views.Login.as_view(),name='login'),
     path('logout',views.Logout.as_view(),name='logout'),
     path('newaccount',views.UserCreate.as_view(),name='newaccount'),
+    path('timeline',views.TimeLine,name='timeline'),
     #↓もういらないかも
     path('usercreate_done',views.UserCreateDone,name='usercreate_done'),
     path('mypage',views.Mypage,name='mypage'),
@@ -16,6 +17,7 @@ urlpatterns = [
     path('<str:user_id>/followers',views.FollowersPage,name='followers'),
     #一時的に追加
     path('allusers',views.AllUsers,name='allusers'),
+    path('allposts',views.AllPosts,name='allposts'),
     path('create',views.Post,name='create'),
     path('create/detail',views.PostDetail,name='detail'),
     path('postcancel/<int:myid>',views.PostCancel,name='postcancel'),

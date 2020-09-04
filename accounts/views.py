@@ -292,6 +292,29 @@ def PostCancel(request,myid):
 
     return redirect(to='/accounts/create')
 
+@login_required(login_url='accounts/login')
+def AllPosts(request):
+    messobjs=Message.objects.all()
+    params={
+        'allmessage':messobjs,
+    }
+    return render(request,'accounts/allposts.html',params)
+
+@login_required(login_url='accounts/login')
+def TimeLine(request):
+    #フォローしている人のメッセージを取得
+    #followedが，userがフォローしている人になる
+    following=Follow.objects.filter(owner=request.user)
+    followlist=[]
+    for i in range(len(following)):
+        followlist.append(following[i].followed)
+
+    messobjs=Message.objects.filter(owner__in=followlist)
+    params={
+        'allmessage':messobjs,
+    }
+    return render(request,'accounts/timeline.html',params)
+
 
 def saveTags(strtags,myid):
     #タグのリストを作成

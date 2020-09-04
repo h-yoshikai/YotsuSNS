@@ -1,0 +1,52 @@
+h3{
+    text-align: center;
+    border-top: solid 3px;
+    border-bottom: solid 3px;
+    padding-top: 1px;
+    padding-bottom: 2px;
+}
+p.block{
+  display:inline-block;
+  margin-bottom: 5px;
+}
+a.username{
+    color: black;
+    margin-left: 5px;
+}
+.postbox{
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    margin: 0.5em 0;
+    color: #5d627b;
+    background: white;
+    border-top: solid 5px #5d627b;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.22);
+}
+div.caption{
+    margin-left: 5px;
+}
+
+
+/*プロフィール画像を丸く見せる*/
+img.thumbnail{
+    border-radius: 50%;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    margin-right: 5px;
+    width: 35px;
+    height: 35px;
+}
+hr{
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+img.preimage{
+    width: 300px;
+    height: 300px;
+    object-fit: cover;
+}
+img.mainimage{
+    width: 100%;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}

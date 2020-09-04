@@ -155,3 +155,6 @@ img.preimage{
     height: 300px;
     object-fit: cover;
 }
+img.mainimage{
+    width: 100%;
+}
