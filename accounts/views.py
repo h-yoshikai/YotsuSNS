@@ -10,7 +10,7 @@ from django.contrib.auth.views import (
 )
 from django.views import generic
 from .forms import (
-    LoginForm,UserCreateForm,UserUpdateForm,ProfileForm,MyPasswordChangeForm,MessageForm,MessageImageForm,MessageContentForm
+    LoginForm,UserCreateForm,UserUpdateForm,ProfileForm,MyPasswordChangeForm,MessageForm,MessageImageForm,MessageContentForm,TagForm
 )
 from django.urls import reverse_lazy
 
@@ -18,8 +18,9 @@ from django.conf import settings
 from django.contrib.auth import get_user_model,login,authenticate
 from django.contrib.auth.mixins import UserPassesTestMixin
 
-from .models import AuthUser,Profile,Follow,Message
+from .models import AuthUser,Profile,Follow,Message,Tag
 from django.conf import settings
+import re
 
 import os
 
@@ -245,6 +246,7 @@ def PostDetail(request):
             newobj=Message.objects.get(myid=obj.myid)
             params={
                 'messageform':MessageContentForm(instance=newobj),
+                'tagform':TagForm(),
                 'mess':newobj,
             }
             return render(request,'accounts/postdetail.html',params)
@@ -252,14 +254,19 @@ def PostDetail(request):
     elif request.method == 'POST' and request.POST['mode'] == '__content__':
         obj=Message.objects.get(myid=request.POST['myid'])
         contentform=MessageContentForm(request.POST,instance=obj)
+        tagform=TagForm(request.POST)
         #フォーム内容が正しければ保存してマイページへ（あとからタイムラインに行くようにする）
-        if contentform.is_valid():
+        if contentform.is_valid() and tagform.is_valid():
+            #キャプションの保存
             contentform.save()
+            #タグの保存
+            saveTags(request.POST['tagfield'],request.POST['myid'])
             return redirect(to='/accounts/mypage')
         #フォーム内容がよくなければ，エラーメッセージを表示（ページそのまま）
         else:
             params={
                 'messageform':contentform,
+                'tagform':tagform,
                 'mess':obj,
             }
             return render(request,'accounts/postdetail.html',params)
@@ -284,3 +291,19 @@ def PostCancel(request,myid):
     obj.delete()
 
     return redirect(to='/accounts/create')
+
+
+def saveTags(strtags,myid):
+    #タグのリストを作成
+    list=[re.sub(r'\s+','',x) for x in strtags.split('#') if not x == '']
+    obj=Message.objects.get(myid=myid)
+    for tag in list:
+        num=Tag.objects.filter(tagname=tag).count()
+        if num == 0:
+            tagobj=Tag.objects.create(tagname=tag)
+            tagobj.relmessage.add(obj)
+            tagobj.save()
+        else:#既にタグが存在している場合
+            tagobj=Tag.objects.get(tagname=tag)
+            tagobj.relmessage.add(obj)
+            tagobj.save()

@@ -126,3 +126,13 @@ class Message(models.Model):
 
     class Meta:
         ordering = ('-pub_date',)
+
+class Tag(models.Model):
+    tagname=models.CharField(
+        unique=True,
+        max_length=30
+    )
+    relmessage=models.ManyToManyField(
+        Message,
+        related_name='reltag'
+    )

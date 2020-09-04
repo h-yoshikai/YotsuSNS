@@ -152,3 +152,16 @@ class MessageImageForm(forms.ModelForm):
         widgets = {
             'image':AdminResubmitImageWidget(),
         }
+
+class TagForm(forms.Form):
+    tagfield=forms.CharField(
+        widget=forms.Textarea,
+        required=False,
+        max_length=200
+    )
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+            field.widget.attrs['placeholder'] = 'タグを付ける'
+            field.widget.attrs['rows'] = '5'
