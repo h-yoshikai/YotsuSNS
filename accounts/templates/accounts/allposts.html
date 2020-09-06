@@ -2,17 +2,66 @@
 {% block static %}
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'accounts/css/post.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'accounts/css/all.css' %}">
+
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">-->
+    <script type="text/javascript">
+     $(document).ready(function(event){
+     $(document).on('click', '#like', function(event){
+        event.preventDefault();
+        var post_id = $(this).attr('value');
+        console.log($(this).attr('value'));
+
+        $.ajax({
+        type: 'POST',
+        url: '{% url 'goodtry' %}',
+        data: {'messmyid': post_id, 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+        dataType: 'json',
+        context: this,
+       })
+       .done(function(data){
+           if($("i",this).hasClass("fas")){
+               $("i",this).removeClass('like-red');
+               $("i",this).removeClass('fas');
+               $("i",this).addClass('far');
+           }else{
+               $("i",this).removeClass('far');
+               $("i",this).addClass('fas');
+               $("i",this).addClass('like-red');
+           }
+       })
+       .fail(function(data){
+           console.log("fail");
+       })
+     });
+    });
+     </script>
 {% endblock %}
 
 {% block content %}
 <h3>All Posts</h3>
-{% for message in allmessage %}
+{% for message,liked in allmessages %}
 <div class="postbox">
 <a class="username" href="{% url 'userpage' message.owner.username %}">
 <img class="thumbnail" src="{% if message.owner.pro_image %}{{message.owner.pro_image.thumbnail.url}}{% else %}/media/images/def_thumbnail.jpg{% endif %}">
 <p class="block">{{message.owner.username}}</p>
 </a>
 <img class="mainimage" src="{{message.image.large.url}}">
+<div>
+{% if liked > 0 %}
+<a href="{% url 'good' message.myid %}">いいね！済み</a>
+<form action="{% url 'goodtry' %}" method="post">
+    {% csrf_token %}
+    <button type="submit" id="like" name="messmyid" value="{{message.myid}}" class="btn"><i class="fas fa-lg fa-heart like-red"></i></button>
+</form>
+{% else %}
+<a href="{% url 'good' message.myid %}">いいね！</a>
+<form action="{% url 'goodtry' %}" method="post">
+    {% csrf_token %}
+    <button type="submit" id="like" name="messmyid" value="{{message.myid}}" class="btn"><i class="far fa-lg fa-heart"></i></button>
+</form>
+{% endif %}
+</div>
 <div class="caption">
     <p>{{message.content}}</p>
     {% for tag in message.reltag.all %}

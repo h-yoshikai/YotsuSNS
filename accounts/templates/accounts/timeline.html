@@ -6,13 +6,18 @@
 
 {% block content %}
 <h3>TimeLine</h3>
-{% for message in allmessage %}
+{% for message,liked in allmessages %}
 <div class="postbox">
 <a class="username" href="{% url 'userpage' message.owner.username %}">
 <img class="thumbnail" src="{% if message.owner.pro_image %}{{message.owner.pro_image.thumbnail.url}}{% else %}/media/images/def_thumbnail.jpg{% endif %}">
 <p class="block">{{message.owner.username}}</p>
 </a>
 <img class="mainimage" src="{{message.image.large.url}}">
+{% if liked > 0 %}
+<a href="{% url 'good' message.myid %}">いいね！済み</a>
+{% else %}
+<a href="{% url 'good' message.myid %}">いいね！</a>
+{% endif %}
 <div class="caption">
     <p>{{message.content}}</p>
     {% for tag in message.reltag.all %}

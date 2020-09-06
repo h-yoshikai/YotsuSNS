@@ -18,9 +18,12 @@ from django.conf import settings
 from django.contrib.auth import get_user_model,login,authenticate
 from django.contrib.auth.mixins import UserPassesTestMixin
 
-from .models import AuthUser,Profile,Follow,Message,Tag
+from .models import AuthUser,Profile,Follow,Message,Tag,Good
 from django.conf import settings
 import re
+
+from django.template.loader import render_to_string
+from django.http import JsonResponse
 
 import os
 
@@ -295,8 +298,13 @@ def PostCancel(request,myid):
 @login_required(login_url='accounts/login')
 def AllPosts(request):
     messobjs=Message.objects.all()
+    likelist=[]
+    for mess in messobjs:
+        liked=Good.objects.filter(owner=request.user,message=mess).count()
+        likelist.append(liked)
+
     params={
-        'allmessage':messobjs,
+        'allmessages':zip(messobjs,likelist),
     }
     return render(request,'accounts/allposts.html',params)
 
@@ -306,15 +314,52 @@ def TimeLine(request):
     #followedが，userがフォローしている人になる
     following=Follow.objects.filter(owner=request.user)
     followlist=[]
+    likelist=[]
     for i in range(len(following)):
         followlist.append(following[i].followed)
 
     messobjs=Message.objects.filter(owner__in=followlist)
+    for mess in messobjs:
+        liked=Good.objects.filter(owner=request.user,message=mess).count()
+        likelist.append(liked)
+
     params={
-        'allmessage':messobjs,
+        'allmessages':zip(messobjs,likelist),
     }
     return render(request,'accounts/timeline.html',params)
 
+@login_required(login_url='accounts/login')
+def good(request,myid):
+    obj=Message.objects.get(myid=myid)
+    if Good.objects.filter(owner=request.user,message=obj).exists():
+        #既にいいね！をされている
+        #解除
+        Good.objects.get(owner=request.user,message=obj).delete()
+    else:
+        newgood=Good(owner=request.user,message=obj)
+        newgood.save()
+    return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
+
+@login_required(login_url='accounts/login')
+def goodtry(request):
+    print(request.is_ajax())
+    if 'messmyid' in request.POST:
+        print("Exist")
+    else:
+        print("Not")
+    obj=Message.objects.get(myid=request.POST.get('messmyid'))
+    if Good.objects.filter(owner=request.user,message=obj).exists():
+        #既にいいね！をされている
+        #解除
+        Good.objects.get(owner=request.user,message=obj).delete()
+    else:
+        newgood=Good(owner=request.user,message=obj)
+        newgood.save()
+
+    if request.is_ajax():
+    #html=render_to_string('accounts/allposts.html',params,request=request)
+        return JsonResponse({'result':'OK'})
+    #return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
 
 def saveTags(strtags,myid):
     #タグのリストを作成

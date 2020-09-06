@@ -50,3 +50,13 @@ img.mainimage{
     margin-top: 5px;
     margin-bottom: 5px;
 }
+.like-red{
+    color: red;
+}
+.fa-heart{
+    float: left;
+}
+button#like{
+    background-color: white;
+    padding-left: 5px;
+}

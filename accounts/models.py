@@ -136,3 +136,15 @@ class Tag(models.Model):
         Message,
         related_name='reltag'
     )
+
+class Good(models.Model):
+    owner=models.ForeignKey(
+        AuthUser,
+        on_delete=models.CASCADE,
+        related_name='good_owner'
+    )
+    message=models.ForeignKey(
+        Message,
+        on_delete=models.CASCADE,
+        related_name='good_message'
+    )
