@@ -40,6 +40,7 @@ hr{
     margin-bottom: 3px;
 }
 /*ユーザごとのページにおいて，フォロワーと数を縦に並べる*/
+/* userpage.html */
 .verwrap{
     display: flex;
     flex-direction: column;
@@ -63,6 +64,7 @@ hr{
     line-height: 1em;
     transition: .3s;
     border: 2px solid #007fff;
+    width: 100%;
 }
 .myfollowa{
     color: #ffffff;
@@ -77,6 +79,7 @@ hr{
     line-height: 1em;
     transition: .3s;
     border: 2px solid #007fff;
+    width: 100%;
 }
 a.weight{
     color: black;
@@ -84,7 +87,9 @@ a.weight{
 a.username{
     color: black;
 }
+/*****************/
 /*フォロー中，フォローするボタンのスタイル*/
+/* follow.html */
 .button{
     border-radius: 5px;
     text-align: center;
@@ -121,7 +126,8 @@ a.username{
 span.underline{
     border-bottom: 3px solid black;
 }
-
+/*******************/
+/* postdetail.html */
 .postimage{
     text-align: center;
 }
@@ -146,6 +152,8 @@ div.cancel{
     margin-top: 10px;
     margin-bottom: 15px;
 }
+/*******************/
+/* postcreate.html */
 div.preview{
     margin-top: 10px;
     text-align: center;
@@ -158,3 +166,4 @@ img.preimage{
 img.mainimage{
     width: 100%;
 }
+/******************/

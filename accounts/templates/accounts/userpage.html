@@ -2,6 +2,34 @@
 {% block static %}
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'accounts/css/edit.css' %}">
+<script type="text/javascript">
+     $(document).ready(function(event){
+     $(document).on('click', '.mfb', function(event){
+            event.preventDefault();
+            var username = $(this).attr('value');
+            $.ajax({
+            type: 'POST',
+            url: '{% url 'followtry' %}',
+            data: {'username': username, 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+            dataType: 'json',
+            context: this,
+           })
+           .done(function(data){
+               $(this).toggleClass('edmyfollow');
+               $(this).toggleClass('myfollow');
+               $(this).toggleClass('myfollowa');
+               if($(this).hasClass('edmyfollow')){
+                   $(this).text('フォロー中');
+               }else{
+                   $(this).text('フォローする');
+               }
+           })
+           .fail(function(data){
+               console.log("fail");
+           })
+     });
+});
+ </script>
 {% endblock %}
 
 {% block content %}
@@ -32,13 +60,12 @@
 </div>
 
 {% if count > 0 %}
-<div class="edmyfollow">フォロー中</div>
+<button type="submit" class="mfb edmyfollow" name="username" value="{{ user.username }}">フォロー中</button>
+
 {% elif count < 0 %}
 <p></p>
 {% else %}
-<div class="myfollow">
-<a class="myfollowa" href="{% url 'followtry' user.username %}">フォローする</a>
-</div>
+<button type="submit" class="mfb myfollow myfollowa" name="username" value="{{ user.username }}">フォローする</button>
 {% endif %}
 
 {% endblock %}

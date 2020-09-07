@@ -2,6 +2,33 @@
 {% block static %}
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'accounts/css/edit.css' %}">
+<script type="text/javascript">
+     $(document).ready(function(event){
+     $(document).on('click', '.follow', function(event){
+            event.preventDefault();
+            var username = $(this).attr('value');
+            $.ajax({
+            type: 'POST',
+            url: '{% url 'followtry' %}',
+            data: {'username': username, 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+            dataType: 'json',
+            context: this,
+           })
+           .done(function(data){
+               $(this).toggleClass('edbutton');
+               $(this).toggleClass('button');
+               if($(this).hasClass('edbutton')){
+                   $(this).text('フォロー中');
+               }else{
+                   $(this).text('フォローする');
+               }
+           })
+           .fail(function(data){
+               console.log("fail");
+           })
+     });
+});
+ </script>
 {% endblock %}
 
 {% block content %}
@@ -13,11 +40,11 @@
 <p>{{user.username}}</p>
 </a>
 {% if count > 0 %}
-<a class="follow edbutton" href="{% url 'followtry' user.username %}">フォロー中</a>
+<button type="submit" class="follow edbutton" name="username" value="{{ user.username }}">フォロー中</button>
 {% elif count < 0 %}
 <p></p>
 {% else %}
-<a class="follow button" href="{% url 'followtry' user.username %}">フォローする</a>
+<button type="submit" class="follow button" name="username" value="{{ user.username }}">フォローする</button>
 {% endif %}
 </div>
 <hr>

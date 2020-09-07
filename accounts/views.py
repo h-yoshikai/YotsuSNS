@@ -132,6 +132,8 @@ def FollowPage(request,user_id):
     flag=1
     #自分がそのユーザ(owner)をフォローしているかどうか調べる
     isFollow=Follow.objects.filter(owner=request.user,followed=user).count()
+    if request.user == user:
+        isFollow=-1
     #この後に，見ているユーザ(request.user)が，followに入っているユーザをフォローしているかどうか調べる
     for i in range(len(following)):
         count=Follow.objects.filter(owner=request.user,followed=following[i].followed).count()
@@ -155,6 +157,9 @@ def FollowersPage(request,user_id):
     flag=0
     #自分がそのユーザ(owner)をフォローしているかどうか調べる
     isFollow=Follow.objects.filter(owner=request.user,followed=user).count()
+    if request.user == user:
+        isFollow=-1
+
     #自分がその人のフォロワーをフォローしているか調べる
     for i in range(len(followers)):
         count=Follow.objects.filter(owner=request.user,followed=followers[i].owner).count()
@@ -187,9 +192,10 @@ def AllUsers(request):
     return render(request,'accounts/allusers.html',params)
 
 @login_required(login_url='/accounts/login')
-def Followadd(request,user_id):
+def Followadd(request):
     #userがfollowedをフォローする
     user=request.user
+    user_id=request.POST.get('username')
     followed=AuthUser.objects.get(username=user_id)
     #followedが本人だったとき
     #先にowner,followed両方自分のレコードを保存するのもあり？
@@ -203,13 +209,16 @@ def Followadd(request,user_id):
         #あとで書き換える(解除処理？)
         data=Follow.objects.get(owner=request.user,followed=followed)
         data.delete()
-        return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
+        if request.is_ajax():
+            return JsonResponse({'result':'OK'})
 
     fol=Follow()
     fol.owner=request.user
     fol.followed=followed
     fol.save()
-    return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
+    if request.is_ajax():
+        return JsonResponse({'result':'OK'})
+    #return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
 
 @login_required(login_url='/accounts/login')
 def UserPage(request,user_id):

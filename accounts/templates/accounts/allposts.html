@@ -10,8 +10,6 @@
      $(document).on('click', '#like', function(event){
         event.preventDefault();
         var post_id = $(this).attr('value');
-        console.log($(this).attr('value'));
-
         $.ajax({
         type: 'POST',
         url: '{% url 'goodtry' %}',
@@ -20,15 +18,9 @@
         context: this,
        })
        .done(function(data){
-           if($("i",this).hasClass("fas")){
-               $("i",this).removeClass('like-red');
-               $("i",this).removeClass('fas');
-               $("i",this).addClass('far');
-           }else{
-               $("i",this).removeClass('far');
-               $("i",this).addClass('fas');
-               $("i",this).addClass('like-red');
-           }
+           $("i",this).toggleClass('like-red');
+           $("i",this).toggleClass('fas');
+           $("i",this).toggleClass('far');
        })
        .fail(function(data){
            console.log("fail");
@@ -49,13 +41,11 @@
 <img class="mainimage" src="{{message.image.large.url}}">
 <div>
 {% if liked > 0 %}
-<a href="{% url 'good' message.myid %}">いいね！済み</a>
 <form action="{% url 'goodtry' %}" method="post">
     {% csrf_token %}
     <button type="submit" id="like" name="messmyid" value="{{message.myid}}" class="btn"><i class="fas fa-lg fa-heart like-red"></i></button>
 </form>
 {% else %}
-<a href="{% url 'good' message.myid %}">いいね！</a>
 <form action="{% url 'goodtry' %}" method="post">
     {% csrf_token %}
     <button type="submit" id="like" name="messmyid" value="{{message.myid}}" class="btn"><i class="far fa-lg fa-heart"></i></button>

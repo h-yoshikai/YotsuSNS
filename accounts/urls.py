@@ -25,6 +25,7 @@ urlpatterns = [
     #goodのもう一つ試し
     path('goodtry',views.goodtry,name='goodtry'),
     #フォロー処理のトライ
-    path('<str:user_id>/followingtry',views.Followadd,name='followtry'),
+    path('followingtry',views.Followadd,name='followtry'),
+    path('<str:user_id>/followingtry',views.Followadd,name='followtrya'),
     path('<str:user_id>',views.UserPage,name='userpage'),
 ]
