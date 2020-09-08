@@ -308,12 +308,15 @@ def PostCancel(request,myid):
 def AllPosts(request):
     messobjs=Message.objects.all()
     likelist=[]
+    numlike=[]
     for mess in messobjs:
         liked=Good.objects.filter(owner=request.user,message=mess).count()
+        count=Good.objects.filter(message=mess).count()
         likelist.append(liked)
+        numlike.append(count)
 
     params={
-        'allmessages':zip(messobjs,likelist),
+        'allmessages':zip(messobjs,likelist,numlike),
     }
     return render(request,'accounts/allposts.html',params)
 
@@ -365,9 +368,11 @@ def goodtry(request):
         newgood=Good(owner=request.user,message=obj)
         newgood.save()
 
+    count=Good.objects.filter(message=obj).count()
+
     if request.is_ajax():
     #html=render_to_string('accounts/allposts.html',params,request=request)
-        return JsonResponse({'result':'OK'})
+        return JsonResponse({'result':'OK','count':count})
     #return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
 
 def saveTags(strtags,myid):

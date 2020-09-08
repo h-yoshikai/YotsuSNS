@@ -21,6 +21,7 @@
            $("i",this).toggleClass('like-red');
            $("i",this).toggleClass('fas');
            $("i",this).toggleClass('far');
+           $("#numlike").text('×'+data.count+'件');
        })
        .fail(function(data){
            console.log("fail");
@@ -32,7 +33,7 @@
 
 {% block content %}
 <h3>All Posts</h3>
-{% for message,liked in allmessages %}
+{% for message,liked,likecount in allmessages %}
 <div class="postbox">
 <a class="username" href="{% url 'userpage' message.owner.username %}">
 <img class="thumbnail" src="{% if message.owner.pro_image %}{{message.owner.pro_image.thumbnail.url}}{% else %}/media/images/def_thumbnail.jpg{% endif %}">
@@ -41,16 +42,17 @@
 <img class="mainimage" src="{{message.image.large.url}}">
 <div>
 {% if liked > 0 %}
-<form action="{% url 'goodtry' %}" method="post">
-    {% csrf_token %}
-    <button type="submit" id="like" name="messmyid" value="{{message.myid}}" class="btn"><i class="fas fa-lg fa-heart like-red"></i></button>
-</form>
+<!--<form action="{% url 'goodtry' %}" method="post">
+    {% csrf_token %}-->
+    <button type="submit" id="like" name="messmyid" value="{{message.myid}}" class="likebtn"><i class="fas fa-lg fa-heart like-red"></i></button>
+<!--</form>-->
 {% else %}
-<form action="{% url 'goodtry' %}" method="post">
-    {% csrf_token %}
-    <button type="submit" id="like" name="messmyid" value="{{message.myid}}" class="btn"><i class="far fa-lg fa-heart"></i></button>
-</form>
+<!--<form action="{% url 'goodtry' %}" method="post">
+    {% csrf_token %}-->
+    <button type="submit" id="like" name="messmyid" value="{{message.myid}}" class="likebtn"><i class="far fa-lg fa-heart"></i></button>
+<!--</form>-->
 {% endif %}
+<span id="numlike">×{{likecount}}件</span>
 </div>
 <div class="caption">
     <p>{{message.content}}</p>
