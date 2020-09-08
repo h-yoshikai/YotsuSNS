@@ -2,22 +2,51 @@
 {% block static %}
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'accounts/css/post.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'accounts/css/all.css' %}">
+<script type="text/javascript">
+ $(document).ready(function(event){
+ $(document).on('click', '#like', function(event){
+    event.preventDefault();
+    var post_id = $(this).attr('value');
+    $.ajax({
+    type: 'POST',
+    url: '{% url 'goodtry' %}',
+    data: {'messmyid': post_id, 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+    dataType: 'json',
+    context: this,
+   })
+   .done(function(data){
+       $("i",this).toggleClass('like-red');
+       $("i",this).toggleClass('fas');
+       $("i",this).toggleClass('far');
+       $(this).next("#numlike").text('×'+data.count+'件');
+   })
+   .fail(function(data){
+       console.log("fail");
+   })
+ });
+});
+ </script>
 {% endblock %}
 
 {% block content %}
 <h3>TimeLine</h3>
-{% for message,liked in allmessages %}
+{% for message,liked,likecount in allmessages %}
 <div class="postbox">
 <a class="username" href="{% url 'userpage' message.owner.username %}">
 <img class="thumbnail" src="{% if message.owner.pro_image %}{{message.owner.pro_image.thumbnail.url}}{% else %}/media/images/def_thumbnail.jpg{% endif %}">
 <p class="block">{{message.owner.username}}</p>
 </a>
 <img class="mainimage" src="{{message.image.large.url}}">
+<div>
 {% if liked > 0 %}
-<a href="{% url 'good' message.myid %}">いいね！済み</a>
+<button type="submit" id="like" name="messmyid" value="{{message.myid}}" class="likebtn"><i class="fas fa-lg fa-heart like-red"></i></button>
 {% else %}
-<a href="{% url 'good' message.myid %}">いいね！</a>
+<button type="submit" id="like" name="messmyid" value="{{message.myid}}" class="likebtn"><i class="far fa-lg fa-heart"></i></button>
 {% endif %}
+<span id="numlike">×{{likecount}}件</span>
+</div>
+
 <div class="caption">
     <p>{{message.content}}</p>
     {% for tag in message.reltag.all %}

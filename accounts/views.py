@@ -327,16 +327,19 @@ def TimeLine(request):
     following=Follow.objects.filter(owner=request.user)
     followlist=[]
     likelist=[]
+    numlike=[]
     for i in range(len(following)):
         followlist.append(following[i].followed)
 
     messobjs=Message.objects.filter(owner__in=followlist)
     for mess in messobjs:
         liked=Good.objects.filter(owner=request.user,message=mess).count()
+        count=Good.objects.filter(message=mess).count()
         likelist.append(liked)
+        numlike.append(count)
 
     params={
-        'allmessages':zip(messobjs,likelist),
+        'allmessages':zip(messobjs,likelist,numlike),
     }
     return render(request,'accounts/timeline.html',params)
 

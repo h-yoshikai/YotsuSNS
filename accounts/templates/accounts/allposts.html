@@ -21,7 +21,7 @@
            $("i",this).toggleClass('like-red');
            $("i",this).toggleClass('fas');
            $("i",this).toggleClass('far');
-           $("#numlike").text('×'+data.count+'件');
+           $(this).next("#numlike").text('×'+data.count+'件');
        })
        .fail(function(data){
            console.log("fail");
