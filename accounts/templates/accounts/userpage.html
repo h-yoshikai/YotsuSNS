@@ -67,5 +67,9 @@
 {% else %}
 <button type="submit" class="mfb myfollow myfollowa" name="username" value="{{ user.username }}">フォローする</button>
 {% endif %}
-
+<div class="userposts">
+{% for mess in usermessages %}
+<img class="mypgmess" src="{{mess.image.large.url}}">
+{% endfor %}
+</div>
 {% endblock %}

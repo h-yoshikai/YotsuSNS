@@ -54,6 +54,9 @@ hr{
 .weight{
     font-weight: bold;
 }
+.profile{
+    margin-bottom: 10px;
+}
 /*個人ごとのページのフォローボタン*/
 .myfollow{
     border-radius: 5px;
@@ -86,6 +89,16 @@ a.weight{
 }
 a.username{
     color: black;
+}
+div.userposts{
+    display: flex;
+    margin-top: 15px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+.mypgmess{
+    width: 32%;
+    margin-bottom: 5px;
 }
 /*****************/
 /*フォロー中，フォローするボタンのスタイル*/

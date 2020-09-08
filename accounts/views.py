@@ -231,11 +231,14 @@ def UserPage(request,user_id):
     count=Follow.objects.filter(owner=request.user,followed=owner).count()
     if request.user == owner:
         count=-1
+    #表示するユーザの投稿を取得
+    usermessages=Message.objects.filter(owner=owner)
     params={
         'user':owner,
         'followercount':followercount,
         'followingcount':followingcount,
         'count':count,
+        'usermessages':usermessages,
     }
     return render(request,'accounts/userpage.html',params)
 
